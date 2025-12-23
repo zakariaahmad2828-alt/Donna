@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONNA // CALENDAR</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            color: #00ffff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.05) 75%, rgba(0, 255, 255, 0.05) 76%, transparent 77%, transparent), 
+                        linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.05) 75%, rgba(0, 255, 255, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* TOP NAVIGATION */
+        .top-nav {
+            position: relative;
+            z-index: 100;
+            background: rgba(10, 14, 39, 0.95);
+            border-bottom: 2px solid #00ffff;
+            box-shadow: 0 4px 30px rgba(0, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 36px;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 24px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #00ffff 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 12px 24px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #00ffff, #0099ff);
+            color: #0a0e27;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-left: 20px;
+            border-left: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .user-badge {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #00ffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: rgba(255, 68, 85, 0.2);
+            border: 1px solid #ff4455;
+            color: #ff4455;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logout-btn:hover {
+            background: #ff4455;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 68, 85, 0.4);
+        }
+
+        /* MAIN CONTENT */
+        .main-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 32px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #00ffff 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: rgba(0, 255, 255, 0.7);
+            letter-spacing: 1px;
+        }
+
+        /* CALENDAR CONTROLS */
+        .calendar-controls {
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .month-navigator {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .month-btn {
+            width: 45px;
+            height: 45px;
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            color: #00ffff;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .month-btn:hover {
+            background: rgba(0, 255, 255, 0.2);
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .current-month {
+            font-family: 'Orbitron', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .add-event-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #00ff88, #00ffcc);
+            color: #0a0e27;
+            border: 2px solid #00ff88;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 13px;
+        }
+
+        .add-event-btn:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* CALENDAR GRID */
+        .calendar-main {
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
+            overflow: hidden;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0;
+        }
+
+        .calendar-header-cell {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 15px;
+            text-align: center;
+            color: #00ffff;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .calendar-day-cell {
+            min-height: 120px;
+            border: 1px solid rgba(0, 255, 255, 0.15);
+            padding: 10px;
+            background: rgba(10, 14, 39, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .calendar-day-cell:hover {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: rgba(0, 255, 255, 0.4);
+        }
+
+        .calendar-day-cell.other-month {
+            opacity: 0.3;
+            background: rgba(10, 14, 39, 0.3);
+        }
+
+        .calendar-day-cell.today {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(255, 0, 128, 0.2));
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        }
+
+        .day-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: #00ffff;
+            margin-bottom: 8px;
+        }
+
+        .calendar-day-cell.today .day-number {
+            color: #ff00ff;
+            font-size: 18px;
+        }
+
+        .day-events {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-height: 85px;
+            overflow-y: auto;
+        }
+
+        .day-events::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .day-events::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 255, 0.3);
+        }
+
+        .event-chip {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(0, 153, 255, 0.2));
+            border-left: 3px solid #00ffff;
+            padding: 5px 8px;
+            font-size: 11px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event-chip:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.4), rgba(0, 153, 255, 0.4));
+            transform: translateX(3px);
+        }
+
+        .more-events {
+            font-size: 10px;
+            color: rgba(0, 255, 255, 0.7);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(10, 14, 39, 0.98);
+            border: 2px solid #00ffff;
+            padding: 30px;
+            max-width: 550px;
+            width: 90%;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.6);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 20px;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .close-btn {
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 68, 85, 0.2);
+            border: 1px solid #ff4455;
+            color: #ff4455;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #ff4455;
+            color: white;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            color: #00ffff;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(10, 14, 39, 0.8);
+            color: #00ffff;
+            font-size: 14px;
+            font-family: 'Rajdhani', sans-serif;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .time-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00ff88, #00ffcc);
+            color: #0a0e27;
+            border: 2px solid #00ff88;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 68, 85, 0.2);
+            border: 1px solid #ff4455;
+            color: #ff4455;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .btn-danger:hover {
+            background: #ff4455;
+            color: white;
+        }
+
+        .event-details {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .event-detail-item {
+            margin-bottom: 12px;
+        }
+
+        .event-detail-label {
+            font-size: 10px;
+            color: rgba(0, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .event-detail-value {
+            color: #00ffff;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .calendar-day-cell {
+                min-height: 100px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .calendar-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .calendar-day-cell {
+                min-height: 80px;
+                padding: 5px;
+            }
+
+            .day-number {
+                font-size: 14px;
+            }
+
+            .event-chip {
+                font-size: 10px;
+                padding: 3px 5px;
+            }
+
+            .time-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="logo-section">
+                <div class="logo-icon">⚡</div>
+                <div class="logo-text">DONNA</div>
+            </div>
+            
+            <div class="nav-links">
+                <a href="/" class="nav-link">💬 Chat</a>
+                <a href="/tasks" class="nav-link">✅ Tasks</a>
+                <a href="/calendar" class="nav-link active">📅 Calendar</a>
+            </div>
+
+            <div class="user-info">
+                <div class="user-badge">
+                    <span>👤</span>
+                    <span id="username-display">Loading...</span>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-container">
+        <div class="page-header">
+            <h1 class="page-title">📅 MISSION CALENDAR</h1>
+            <p class="page-subtitle">Schedule and track your operations</p>
+        </div>
+
+        <!-- Calendar Controls -->
+        <div class="calendar-controls">
+            <div class="month-navigator">
+                <button class="month-btn" onclick="previousMonth()">◀</button>
+                <div class="current-month" id="currentMonth">December 2025</div>
+                <button class="month-btn" onclick="nextMonth()">▶</button>
+            </div>
+            <button class="add-event-btn" onclick="openCreateModal()">➕ Add Event</button>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-main">
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Calendar will be generated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Event Modal -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">Create Event</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <form id="eventForm" onsubmit="saveEvent(event)">
+                <div class="form-group">
+                    <label class="form-label">Event Title</label>
+                    <input type="text" class="form-input" id="eventTitle" required placeholder="Meeting, appointment, etc.">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-input" id="eventDate" required>
+                </div>
+                <div class="time-group">
+                    <div class="form-group">
+                        <label class="form-label">Start Time</label>
+                        <input type="time" class="form-input" id="eventStartTime">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">End Time</label>
+                        <input type="time" class="form-input" id="eventEndTime">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-input" id="eventDescription" placeholder="Additional details, location, notes..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Save Event</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Event Modal -->
+    <div class="modal" id="viewEventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Event Details</h2>
+                <button class="close-btn" onclick="closeViewModal()">✕</button>
+            </div>
+            <div class="event-details" id="eventDetailsContent"></div>
+            <button class="btn-danger" onclick="deleteCurrentEvent()">🗑 Delete Event</button>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        let events = [];
+        let selectedDate = null;
+        let currentEventId = null;
+        let authToken = null;
+        let currentUser = null;
+
+        // Initialize
+        window.addEventListener('load', () => {
+            console.log('🚀 Initializing calendar page...');
+            
+            authToken = localStorage.getItem('authToken');
+            const userDataString = localStorage.getItem('currentUser');
+            
+            console.log('🔑 Auth check:', {
+                hasToken: !!authToken,
+                hasUserData: !!userDataString
+            });
+            
+            if (!authToken || !userDataString) {
+                console.log('❌ Not authenticated, redirecting to login');
+                window.location.href = '/login';
+                return;
+            }
+            
+            try {
+                currentUser = JSON.parse(userDataString);
+                console.log('✅ Authenticated as:', currentUser.username);
+                document.getElementById('username-display').textContent = currentUser.username;
+            } catch (e) {
+                console.error('❌ Invalid user JSON:', e);
+                localStorage.clear();
+                window.location.href = '/login';
+                return;
+            }
+            
+            loadEvents();
+            renderCalendar();
+            setInterval(loadEvents, 30000);
+        });
+
+        // Render Calendar
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            document.getElementById('currentMonth').textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const prevLastDay = new Date(year, month, 0);
+            const firstDayOfWeek = firstDay.getDay();
+            const lastDateOfMonth = lastDay.getDate();
+            const prevLastDate = prevLastDay.getDate();
+
+            let html = '';
+
+            // Header
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            days.forEach(day => {
+                html += `<div class="calendar-header-cell">${day}</div>`;
+            });
+
+            // Previous month days
+            for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+                html += `<div class="calendar-day-cell other-month"><div class="day-number">${prevLastDate - i}</div></div>`;
+            }
+
+            // Current month days
+            const today = new Date();
+            for (let day = 1; day <= lastDateOfMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+                const dayEvents = events.filter(e => {
+                    const eventDate = e.date || (e.starttime ? e.starttime.split('T')[0] : '');
+                    return eventDate === dateStr;
+                });
+
+                html += `<div class="calendar-day-cell ${isToday ? 'today' : ''}" onclick="openCreateModalForDate('${dateStr}')">
+                    <div class="day-number">${day}</div>
+                    <div class="day-events">
+                        ${dayEvents.slice(0, 3).map(event => {
+                            const hasTime = event.time && event.time !== '00:00';
+                            const timeStr = hasTime ? event.time.substring(0, 5) : '';
+                            return `<div class="event-chip ${hasTime ? 'has-time' : ''}" onclick="event.stopPropagation(); viewEvent(${event.id})">${hasTime ? timeStr + ' ' : ''}${escapeHtml(event.title)}</div>`;
+                        }).join('')}
+                        ${dayEvents.length > 3 ? `<div class="more-events">${dayEvents.length - 3} more</div>` : ''}
+                    </div>
+                </div>`;
+            }
+
+            // Next month days
+            const totalCells = Math.ceil((firstDayOfWeek + lastDateOfMonth) / 7) * 7;
+            const nextDays = totalCells - firstDayOfWeek - lastDateOfMonth;
+            for (let day = 1; day <= nextDays; day++) {
+                html += `<div class="calendar-day-cell other-month"><div class="day-number">${day}</div></div>`;
+            }
+
+            document.getElementById('calendarGrid').innerHTML = html;
+        }
+
+        // Load events
+        async function loadEvents() {
+            try {
+                console.log('📥 Loading events...');
+                const response = await fetch('/api/calendar/events', {
+                    headers: { 
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('📡 Events response status:', response.status);
+
+                if (response.status === 401) {
+                    console.log('❌ 401 Unauthorized');
+                    alert('Your session has expired. Please login again.');
+                    localStorage.clear();
+                    window.location.href = '/login';
+                    return;
+                }
+
+                const data = await response.json();
+                console.log('📦 Events data:', data);
+
+                if (data.success) {
+                    events = data.events;
+                    console.log(`✅ Loaded ${events.length} events`);
+                    renderCalendar();
+                }
+            } catch (error) {
+                console.error('❌ Error loading events:', error);
+            }
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function openCreateModal() {
+            selectedDate = null;
+            currentEventId = null;
+            document.getElementById('modalTitle').textContent = 'Create Event';
+            document.getElementById('eventForm').reset();
+            document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('eventModal').classList.add('active');
+        }
+
+        function openCreateModalForDate(dateStr) {
+            selectedDate = dateStr;
+            currentEventId = null;
+            document.getElementById('modalTitle').textContent = 'Create Event';
+            document.getElementById('eventForm').reset();
+            document.getElementById('eventDate').value = dateStr;
+            document.getElementById('eventModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('eventModal').classList.remove('active');
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewEventModal').classList.remove('active');
+            currentEventId = null;
+        }
+
+        function viewEvent(eventId) {
+            const event = events.find(e => e.id === eventId);
+            if (!event) return;
+
+            currentEventId = eventId;
+            const eventDate = new Date(event.date || event.starttime);
+            const dateStr = eventDate.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const timeStr = event.time && event.time !== '00:00' ? event.time : 'All day';
+
+            document.getElementById('eventDetailsContent').innerHTML = `
+                <div class="event-detail-item">
+                    <div class="event-detail-label">Event Title</div>
+                    <div class="event-detail-value">${escapeHtml(event.title)}</div>
+                </div>
+                <div class="event-detail-item">
+                    <div class="event-detail-label">Date</div>
+                    <div class="event-detail-value">${dateStr}</div>
+                </div>
+                <div class="event-detail-item">
+                    <div class="event-detail-label">Time</div>
+                    <div class="event-detail-value">${timeStr}</div>
+                </div>
+                ${event.description ? `<div class="event-detail-item">
+                    <div class="event-detail-label">Description</div>
+                    <div class="event-detail-value">${escapeHtml(event.description)}</div>
+                </div>` : ''}
+            `;
+            document.getElementById('viewEventModal').classList.add('active');
+        }
+
+        async function saveEvent(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('eventTitle').value.trim();
+            const date = document.getElementById('eventDate').value;
+            const startTime = document.getElementById('eventStartTime').value;
+            const endTime = document.getElementById('eventEndTime').value;
+            const description = document.getElementById('eventDescription').value.trim();
+
+            if (!title || !date) {
+                alert('Please fill in title and date');
+                return;
+            }
+
+            console.log('💾 Saving event:', { title, date, startTime });
+
+            const eventData = {
+                title,
+                date,
+                time: startTime || '00:00',
+                starttime: startTime ? `${date}T${startTime}` : null,
+                endtime: endTime ? `${date}T${endTime}` : null,
+                description
+            };
+
+            try {
+                const url = currentEventId ? `/api/calendar/events/${currentEventId}` : '/api/calendar/events';
+                const method = currentEventId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method,
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}` 
+                    },
+                    body: JSON.stringify(eventData)
+                });
+
+                if (response.status === 401) {
+                    alert('Session expired. Please login again.');
+                    localStorage.clear();
+                    window.location.href = '/login';
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log('✅ Event saved successfully');
+                    loadEvents();
+                    closeModal();
+                    alert(currentEventId ? 'Event updated!' : 'Event created!');
+                } else {
+                    alert('Error: ' + (data.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('❌ Error saving event:', error);
+                alert('Failed to save event');
+            }
+        }
+
+        async function deleteCurrentEvent() {
+            if (!currentEventId || !confirm('Are you sure you want to delete this event?')) return;
+
+            console.log('🗑 Deleting event:', currentEventId);
+
+            try {
+                const response = await fetch(`/api/calendar/events/${currentEventId}`, {
+                    method: 'DELETE',
+                    headers: { 
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.status === 401) {
+                    alert('Session expired. Please login again.');
+                    localStorage.clear();
+                    window.location.href = '/login';
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log('✅ Event deleted successfully');
+                    loadEvents();
+                    closeViewModal();
+                    alert('Event deleted!');
+                } else {
+                    alert('Error deleting event');
+                }
+            } catch (error) {
+                console.error('❌ Error deleting event:', error);
+                alert('Failed to delete event');
+            }
+        }
+
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                console.log('🚪 Logging out...');
+                localStorage.clear();
+                window.location.href = '/login';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONNA // MISSION CONTROL</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.05) 75%, rgba(0, 255, 255, 0.05) 76%, transparent 77%, transparent), 
+                linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.05) 75%, rgba(0, 255, 255, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0) translateX(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px) translateX(50px); }
+        }
+
+        /* Floating Particles */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, #00ffff, transparent),
+                radial-gradient(2px 2px at 60% 70%, #00ffff, transparent),
+                radial-gradient(1px 1px at 50% 50%, #00ffff, transparent),
+                radial-gradient(1px 1px at 80% 10%, #00ffff, transparent),
+                radial-gradient(2px 2px at 90% 60%, #0099ff, transparent),
+                radial-gradient(1px 1px at 33% 85%, #00ffff, transparent),
+                radial-gradient(1px 1px at 75% 25%, #0099ff, transparent);
+            background-size: 300% 300%;
+            background-position: 0% 0%;
+            animation: moveParticles 30s ease infinite;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes moveParticles {
+            0%, 100% { background-position: 0% 0%; }
+            25% { background-position: 100% 0%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-panel {
+            background: rgba(10, 14, 39, 0.98);
+            border: 2px solid #00ffff;
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.4),
+                inset 0 0 60px rgba(0, 255, 255, 0.05);
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+            animation: panelGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes panelGlow {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 60px rgba(0, 255, 255, 0.4),
+                    inset 0 0 60px rgba(0, 255, 255, 0.05);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 80px rgba(0, 255, 255, 0.6),
+                    inset 0 0 60px rgba(0, 255, 255, 0.1);
+            }
+        }
+
+        /* Corner Decorations */
+        .login-panel::before,
+        .login-panel::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #00ffff;
+        }
+
+        .login-panel::before {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .login-panel::after {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        /* Scan Line Effect */
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: scan 3s linear infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(600px); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 45px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 56px;
+            margin-bottom: 15px;
+            animation: logoFloat 3s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px #00ffff);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .title {
+            font-family: 'Orbitron', monospace;
+            font-size: 32px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #00ffff 0%, #0099ff 50%, #00ffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 100% center; }
+        }
+
+        .subtitle {
+            font-size: 11px;
+            color: #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 35px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .tab-indicator {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #0099ff);
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        .tab-indicator.register {
+            transform: translateX(100%);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px;
+            background: transparent;
+            color: rgba(0, 255, 255, 0.5);
+            border: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: #00ffff;
+        }
+
+        .tab-btn.active {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            color: #00ffff;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            background: rgba(0, 20, 40, 0.8);
+            color: #00ffff;
+            font-size: 13px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        input:focus {
+            border-color: #00ffff;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.05);
+            background: rgba(0, 30, 60, 0.9);
+            transform: translateY(-2px);
+        }
+
+        input::placeholder {
+            color: rgba(0, 255, 255, 0.4);
+        }
+
+        .message {
+            padding: 14px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message.error {
+            background: rgba(255, 68, 85, 0.2);
+            border: 1px solid #ff4455;
+            border-left: 4px solid #ff4455;
+            color: #ff4455;
+            display: block;
+        }
+
+        .message.success {
+            background: rgba(0, 255, 136, 0.2);
+            border: 1px solid #00ff88;
+            border-left: 4px solid #00ff88;
+            color: #00ff88;
+            display: block;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            font-family: 'Orbitron', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff00ff 0%, #ff0080 100%);
+            color: white;
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.6);
+            transform: translateY(-3px);
+            border-color: #ff0080;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #00ff88 0%, #00ffcc 100%);
+            color: #0a0e27;
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+            transform: translateY(-3px);
+            border-color: #00ffcc;
+        }
+
+        .hint {
+            font-size: 10px;
+            color: rgba(0, 255, 255, 0.5);
+            margin-top: 12px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* Loading Animation */
+        .loading-dots {
+            display: inline-block;
+        }
+
+        .loading-dots::after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .login-panel {
+                padding: 40px 25px;
+            }
+
+            .title {
+                font-size: 26px;
+                letter-spacing: 3px;
+            }
+
+            .logo {
+                font-size: 48px;
+            }
+
+            .header {
+                margin-bottom: 35px;
+            }
+
+            .btn {
+                padding: 14px;
+                font-size: 12px;
+            }
+        }
+
+        /* Accessibility - Focus States */
+        input:focus,
+        .btn:focus,
+        .tab-btn:focus {
+            outline: 2px solid #00ffff;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-panel">
+            <div class="scan-line"></div>
+            
+            <div class="header">
+                <div class="logo">⚡</div>
+                <div class="title">DONNA</div>
+                <div class="subtitle">// AUTHENTICATION REQUIRED</div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab-indicator" id="tabIndicator"></div>
+                <button class="tab-btn active" onclick="switchTab('login')">🔐 LOGIN</button>
+                <button class="tab-btn" onclick="switchTab('register')">✨ REGISTER</button>
+            </div>
+
+            <!-- LOGIN TAB -->
+            <div id="login" class="tab-content active">
+                <div class="message" id="loginMessage"></div>
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+                </div>
+                <button class="btn btn-primary" id="loginBtn" onclick="handleLogin()">ACCESS SYSTEM</button>
+                <div class="hint">Secured by quantum encryption</div>
+            </div>
+
+            <!-- REGISTER TAB -->
+            <div id="register" class="tab-content">
+                <div class="message" id="registerMessage"></div>
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" id="registerUsername" placeholder="Choose your username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" id="registerEmail" placeholder="Your email address" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" id="registerPassword" placeholder="Minimum 6 characters" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label>CONFIRM PASSWORD</label>
+                    <input type="password" id="registerConfirm" placeholder="Re-enter password" autocomplete="new-password">
+                </div>
+                <button class="btn btn-secondary" id="registerBtn" onclick="handleRegister()">INITIALIZE ACCOUNT</button>
+                <div class="hint">Join the mission control network</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const isExplicitLogout = new URLSearchParams(window.location.search).get('logout');
+        if (isExplicitLogout) {
+            console.log('🔄 Explicit logout detected - clearing auth');
+            localStorage.clear();
+        }
+
+        function switchTab(tab) {
+            document.getElementById('login').classList.remove('active');
+            document.getElementById('register').classList.remove('active');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+            
+            const indicator = document.getElementById('tabIndicator');
+            if (tab === 'register') {
+                indicator.classList.add('register');
+            } else {
+                indicator.classList.remove('register');
+            }
+            
+            document.getElementById('loginMessage').style.display = 'none';
+            document.getElementById('registerMessage').style.display = 'none';
+        }
+
+        function showMessage(elementId, message, type) {
+            const msgEl = document.getElementById(elementId);
+            msgEl.textContent = message;
+            msgEl.className = `message ${type}`;
+            msgEl.style.display = 'block';
+        }
+
+        async function handleLogin() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const loginBtn = document.getElementById('loginBtn');
+
+            console.log('🔐 Login attempt:', { username, passwordLength: password.length });
+
+            if (!username || !password) {
+                showMessage('loginMessage', '❌ Please fill in all fields', 'error');
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = 'AUTHENTICATING<span class="loading-dots"></span>';
+
+            try {
+                console.log('📡 Sending login request to /api/auth/login');
+                
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                console.log('📥 Response status:', response.status);
+
+                const data = await response.json();
+                console.log('📥 Response data:', { success: data.success, hasToken: !!data.token });
+
+                if (data.success && data.token) {
+                    localStorage.setItem('authToken', data.token);
+                    
+                    const currentUser = {
+                        id: data.user?.id,
+                        username: data.user?.username || username,
+                        email: data.user?.email
+                    };
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+                    console.log('✅ Login successful!');
+                    console.log('✅ Token stored:', data.token.substring(0, 30) + '...');
+                    console.log('✅ User stored:', currentUser);
+
+                    showMessage('loginMessage', '✓ ACCESS GRANTED • REDIRECTING...', 'success');
+                    
+                    setTimeout(() => {
+                        console.log('🔄 Redirecting to /');
+                        window.location.href = '/';
+                    }, 1000);
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('❌ Login error:', error);
+                showMessage('loginMessage', `❌ ACCESS DENIED: ${error.message}`, 'error');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'ACCESS SYSTEM';
+            }
+        }
+
+        async function handleRegister() {
+            const username = document.getElementById('registerUsername').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const confirm = document.getElementById('registerConfirm').value.trim();
+            const registerBtn = document.getElementById('registerBtn');
+
+            console.log('📝 Registration attempt:', { username, email });
+
+            if (!username || !email || !password || !confirm) {
+                showMessage('registerMessage', '❌ Please fill in all fields', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('registerMessage', '❌ Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            if (password !== confirm) {
+                showMessage('registerMessage', '❌ Passwords do not match', 'error');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                showMessage('registerMessage', '❌ Please enter a valid email', 'error');
+                return;
+            }
+
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = 'INITIALIZING<span class="loading-dots"></span>';
+
+            try {
+                console.log('📡 Sending registration request');
+                
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                console.log('📥 Response status:', response.status);
+
+                const data = await response.json();
+                console.log('📥 Response data:', data);
+
+                if (data.success) {
+                    console.log('✅ Registration successful');
+                    showMessage('registerMessage', '✓ ACCOUNT CREATED • SWITCHING TO LOGIN...', 'success');
+                    
+                    setTimeout(() => {
+                        document.getElementById('registerUsername').value = '';
+                        document.getElementById('registerEmail').value = '';
+                        document.getElementById('registerPassword').value = '';
+                        document.getElementById('registerConfirm').value = '';
+                        
+                        document.querySelector('.tab-btn').click();
+                        document.getElementById('loginUsername').value = username;
+                    }, 1500);
+                } else {
+                    throw new Error(data.message || 'Registration failed');
+                }
+            } catch (error) {
+                console.error('❌ Registration error:', error);
+                showMessage('registerMessage', `❌ REGISTRATION FAILED: ${error.message}`, 'error');
+            } finally {
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'INITIALIZE ACCOUNT';
+            }
+        }
+
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const loginTab = document.getElementById('login');
+                
+                if (loginTab.classList.contains('active')) {
+                    handleLogin();
+                } else {
+                    handleRegister();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
