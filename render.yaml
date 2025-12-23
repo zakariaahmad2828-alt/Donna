@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: donna
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9
+      - key: SUPABASE_URL
+        value: https://nenybuodroiapzwxifzw.supabase.co
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        sync: false
